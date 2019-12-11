@@ -71,7 +71,7 @@
         {"x":192,"y":473},{"x":192,"y":474},{"x":192,"y":475},{"x":192,"y":478},{"x":192,"y":483},{"x":192,"y":487},{"x":192,"y":490},
         {"x":192,"y":494},{"x":192,"y":496},{"x":192,"y":498},{"x":192,"y":499},{"x":192,"y":501},{"x":191,"y":501}];
 
-        var myCanvas = new MythwareCanvas('canvasComponent',[],500,500);
+        var myCanvas = new MythwareCanvas('canvasComponent',[],1000,1000);
         
 
         document.getElementById('add').onclick = function() {
@@ -84,7 +84,7 @@
         }
 
         document.getElementById('setBack').onclick = () => {
-            myCanvas.setBaseImg('59eee70566d89.png');
+            myCanvas.setBaseImg('59eee70566d89.png',true);
             // myCanvas.setBaseImg('5a531f593283c.jpg');
         }
 

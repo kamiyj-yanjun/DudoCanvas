@@ -16,20 +16,12 @@ class MythwareCanvas {
     }
 
     init() {
-        document.getElementById(this.target).innerHTML = '<canvas id="canvas"></canvas>';
+        document.getElementById(this.target).innerHTML = '<canvas id="canvas" style="width:1000px; height: 1000px;"></canvas>';
         this.canvas = document.getElementById('canvas');
         this.canvas.width = this.canvasWidth;
         this.canvas.height = this.canvasHeight;
-        this.canvas.style = this.style;
-        var cw = this.canvas.width;
-        var ch = this.canvas.height;
-        var scalew = cw / this.dw;
-        var scaleh = ch / this.dh;
-        var rect = this.canvas.getBoundingClientRect();
-        this.x = rect.left;
-        this.y = rect.top;
+        // this.canvas.style = this.style;
         this.context = this.canvas.getContext('2d');
-        this.context.transform(scalew, 0, 0, scaleh, this.x, this.y);
         this.context.beginPath();
         this.run();
     }
@@ -56,25 +48,16 @@ class MythwareCanvas {
     }
 
     // 设置背景
-    setBaseImg(imgsrc, resetCanvas = true) {
-        var _w = this.dw;
-        var _h = this.dh;
-        var _x = this.x;
-        var _y = this.y;
-        var _canvas = this.canvas;
-        var _context = this.context;
+    setBaseImg(imgsrc, resetCanvas = false) {
+        var _this = this;
         var img = new Image();
         img.src = imgsrc;
-        // img.setAttribute("crossOrigin",'Anonymous')
         img.onload = function() {
             if(resetCanvas) {
                 // 依据背景图比例调整画布规格
-                _canvas.height = this.height / this.width * _canvas.width;
+                _this.canvas.style.height = this.height / this.width * parseInt(_this.canvas.style.width) + 'px';
             }
-            var nw = _canvas.width;
-            var nh = _canvas.height;
-            _context.drawImage(this, 0, 0, nw, nh);
-            _context.transform(nw / _w, 0, 0, nh / _h, _x, _y);
+            _this.context.drawImage(this, 0, 0, _this.canvas.width, _this.canvas.height);
         }
     }
 
