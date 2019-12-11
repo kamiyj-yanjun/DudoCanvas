@@ -1,38 +1,50 @@
 class MythwareCanvas {
-    constructor(target = '', dotarr = [], canvasWidth = 500, canvasHeight = 500) {
-        this.target = target;
-        this.dotarr = dotarr;
+
+    constructor(paramsObj) {
+        var props = {
+            target: '',
+            dotarr: [],
+            style: {
+                width: '500px',
+                height: '500px'
+            },
+            canvasWidth: 500,
+            canvasHeight: 500
+        };
+        this.prop = this.extend(props, paramsObj, true);
+
         this.canvas = null;
         this.context = null;
         this.todot = null;
-        this.style = '';
+        // 窗口
         this.dw = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         this.dh = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        this.canvasWidth = canvasWidth;
-        this.canvasHeight = canvasHeight;
+        // canvas相对窗口坐标
         this.x = 0;
         this.y = 0;
-        this.init();
+
+        this.init(this.prop);
     }
 
-    init() {
-        document.getElementById(this.target).innerHTML = '<canvas id="canvas" style="width:1000px; height: 1000px;"></canvas>';
+    init(prop) {
+        document.getElementById(prop.target).innerHTML = '<canvas id="canvas" style="width: 500px; height: 500px;"></canvas>';
         this.canvas = document.getElementById('canvas');
-        this.canvas.width = this.canvasWidth;
-        this.canvas.height = this.canvasHeight;
+        this.canvas.width = prop.canvasWidth;
+        this.canvas.height = prop.canvasHeight;
+        this.css(this.canvas, prop.style);
         // this.canvas.style = this.style;
         this.context = this.canvas.getContext('2d');
         this.context.beginPath();
-        this.run();
+        this.run(prop);
     }
 
-    run() {
-        if(this.dotarr.length != 0) {
+    run(prop) {
+        if(prop.dotarr.length != 0) {
             //运行
-            this.todot = this.dotarr.shift();
+            this.todot = prop.dotarr.shift();
             this.context.lineTo(this.todot.x, this.todot.y);
             this.context.stroke();
-            this.run();
+            this.run(prop);
         } else {
             return;
         }
@@ -40,11 +52,11 @@ class MythwareCanvas {
 
     add(newdot) {
         if(newdot instanceof Array) {
-            this.dotarr = this.dotarr.concat(newdot);
+            this.prop.dotarr = this.prop.dotarr.concat(newdot);
         } else {
-            this.dotarr.push(newdot);
+            this.prop.dotarr.push(newdot);
         }
-        this.run();
+        this.run(this.prop);
     }
 
     // 设置背景
@@ -70,5 +82,22 @@ class MythwareCanvas {
         document.body.appendChild(aTmp);
         aTmp.click();
         aTmp.remove();
+    }
+
+    // 样式绑定
+    css(obj, styleObj){
+        for(var key in styleObj) {
+            obj.style[key] = styleObj[key];
+        }
+    }
+
+    // 属性绑定
+    extend(o, n, override) {
+        for(var key in n) {
+            if(n.hasOwnProperty(key) && (!o.hasOwnProperty(key) || override)) {
+                o[key] = n[key];
+            }
+        }
+        return o;
     }
 }

@@ -16,7 +16,7 @@
     </style>
 </head>
 <body>
-    <div id='canvasComponent'></div>
+    <div id='canvasComponent' style="border: 1px;"></div>
     <div>
         <button id='add'>add</button>
         <button id='setBack'>setBack</button>
@@ -71,7 +71,17 @@
         {"x":192,"y":473},{"x":192,"y":474},{"x":192,"y":475},{"x":192,"y":478},{"x":192,"y":483},{"x":192,"y":487},{"x":192,"y":490},
         {"x":192,"y":494},{"x":192,"y":496},{"x":192,"y":498},{"x":192,"y":499},{"x":192,"y":501},{"x":191,"y":501}];
 
-        var myCanvas = new MythwareCanvas('canvasComponent',[],1000,1000);
+        var props = {
+            target: 'canvasComponent',
+            dotarr: [],
+            style: {
+                width: '1000px',
+                height: '1000px'
+            },
+            canvasWidth: 1000,
+            canvasHeight: 1000,
+        };
+        var myCanvas = new MythwareCanvas(props);
         
 
         document.getElementById('add').onclick = function() {
