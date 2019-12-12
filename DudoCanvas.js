@@ -1,4 +1,4 @@
-class MythwareCanvas {
+class DudoCanvas {
 
     constructor(paramsObj) {
         var props = {
