@@ -63,6 +63,7 @@ class DudoCanvas {
     setBaseImg(imgsrc, resetCanvas = false) {
         var _this = this;
         var img = new Image();
+        // img.setAttribute('crossOrigin', 'anonymous');
         img.src = imgsrc;
         img.onload = function() {
             if(resetCanvas) {
@@ -70,6 +71,21 @@ class DudoCanvas {
                 _this.canvas.style.height = this.height / this.width * parseInt(_this.canvas.style.width) + 'px';
             }
             _this.context.drawImage(this, 0, 0, _this.canvas.width, _this.canvas.height);
+            // _this.getPx(this);
+        }
+    }
+
+    getPx(img){
+        var imgW = img.width || img.naturalWidth;
+        var imgH = img.height || img.naturalHeight;
+        var imgdata = this.context.getImageData(0, 0, imgW, imgH);
+        var count = 0;
+        for(let px of imgdata.data) {
+            console.log(px);
+            count ++;
+            if(count > 100) {
+                break;
+            }
         }
     }
 
