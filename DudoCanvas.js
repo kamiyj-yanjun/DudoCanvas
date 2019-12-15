@@ -12,6 +12,7 @@ class DudoCanvas {
             canvasHeight: 500
         };
         this.prop = this.extend(props, paramsObj, true);
+        this.dotarrStorage = [];
 
         this.canvas = null;
         this.context = null;
@@ -42,11 +43,23 @@ class DudoCanvas {
         if(prop.dotarr.length != 0) {
             //运行
             this.todot = prop.dotarr.shift();
+            this.dotarrStorage.push(this.todot);
             this.context.lineTo(this.todot.x, this.todot.y);
             this.context.stroke();
             this.run(prop);
         } else {
             return;
+        }
+    }
+
+    runstorage() {
+        if(this.dotarrStorage.length != 0) {
+            var start = this.dotarrStorage[0];
+            this.context.moveTo(start.x, start.y);
+            this.dotarrStorage.forEach(data => {
+                this.context.lineTo(data.x, data.y);
+                this.context.stroke();
+            });
         }
     }
 
@@ -63,19 +76,20 @@ class DudoCanvas {
     setBaseImg(imgsrc, resetCanvas = false) {
         var _this = this;
         var img = new Image();
-        // img.setAttribute('crossOrigin', 'anonymous');
         img.src = imgsrc;
         img.onload = function() {
+            this.setAttribute('crossOrigin', 'anonymous');
             if(resetCanvas) {
                 // 依据背景图比例调整画布规格
                 _this.canvas.style.height = this.height / this.width * parseInt(_this.canvas.style.width) + 'px';
             }
             _this.context.drawImage(this, 0, 0, _this.canvas.width, _this.canvas.height);
+            _this.runstorage();
             // _this.getPx(this);
         }
     }
 
-    getPx(img){
+    getPx(img) {
         var imgW = img.width || img.naturalWidth;
         var imgH = img.height || img.naturalHeight;
         var imgdata = this.context.getImageData(0, 0, imgW, imgH);
@@ -89,6 +103,7 @@ class DudoCanvas {
         }
     }
 
+    // 画布输出为图片并保存
     save(rex, savename) {
         // image/png image/jpeg image/bmp
         var url = this.canvas.toDataURL(rex);
@@ -101,19 +116,19 @@ class DudoCanvas {
     }
 
     // 样式绑定
-    css(obj, styleObj){
+    css(obj, styleObj) {
         for(var key in styleObj) {
             obj.style[key] = styleObj[key];
         }
     }
 
     // 属性绑定
-    extend(o, n, override) {
-        for(var key in n) {
-            if(n.hasOwnProperty(key) && (!o.hasOwnProperty(key) || override)) {
-                o[key] = n[key];
+    extend(obj, params, override) {
+        for(var key in params) {
+            if(params.hasOwnProperty(key) && (!obj.hasOwnProperty(key) || override)) {
+                obj[key] = params[key];
             }
         }
-        return o;
+        return obj;
     }
 }
